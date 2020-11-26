@@ -10,7 +10,12 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
+    "bezier-easing": "^2.1.0",
     "d3": "^6.2.0",
+    "d3-force": "^2.1.1",
+    "d3-selection": "^2.0.0",
+    "format-message": "^6.2.3",
+    "node-sass": "4.14.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
@@ -42,6 +47,9 @@
     ]
   },
   "devDependencies": {
-    "@types/d3": "^6.2.0"
+    "@types/d3": "^6.2.0",
+    "@types/d3-force": "^2.1.0",
+    "@types/d3-selection": "^2.0.0",
+    "typed-scss-modules": "^3.4.0"
   }
 }
