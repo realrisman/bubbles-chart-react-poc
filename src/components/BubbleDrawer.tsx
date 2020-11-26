@@ -14,9 +14,8 @@ type Props = {
 };
 
 const bubbleClassByType = {
-  high: styles.highBubble,
-  medium: styles.mediumBubble,
-  low: styles.lowBubble,
+  positive: styles.positiveBubble,
+  negative: styles.lowBubble,
 };
 
 export default class BubbleDrawer {
@@ -33,6 +32,12 @@ export default class BubbleDrawer {
     SVGElement,
     BubbleNodeType
   >;
+  rectPositive: Selection<
+    SVGRectElement,
+    BubbleNodeType,
+    SVGElement,
+    BubbleNodeType
+  >;
 
   constructor(props: Props) {
     this.props = props;
@@ -44,8 +49,17 @@ export default class BubbleDrawer {
 
     const leaf = svg.selectAll("g").data(simulation.nodes()).join("g");
 
+    this.rectPositive = leaf
+      .append("clipPath")
+      .attr("id", (d) => `clip-${d.bubbleId}`)
+      .append("rect")
+      .style("fill", "#c5d7ea")
+      .attr("height", (d) => d.r * 2)
+      .attr("width", (d) => d.r * 2);
+
     this.bubbles = leaf
       .append("circle")
+      .attr("clip-path", (d) => `url(#clip${d.bubbleId})`)
       .attr("r", (d) => d.r)
       .attr("class", (d) => bubbleClassByType[d.mastery])
       .attr("role", "button")
@@ -74,6 +88,11 @@ export default class BubbleDrawer {
   }
 
   handleTick = (): void => {
+    this.rectPositive &&
+      this.rectPositive
+        .attr("x", (d: BubbleNodeType) => d.x)
+        .attr("y", (d: BubbleNodeType) => d.y);
+
     this.bubbles &&
       this.bubbles
         .attr("cx", (d: BubbleNodeType) => d.x)
@@ -153,16 +172,15 @@ export default class BubbleDrawer {
     const { svg } = this.props;
     if (!svg) return this;
     const count = {
-      high: 0,
-      medium: 0,
-      low: 0,
+      positive: 0,
+      negative: 0,
     };
     const bubbles = svg.selectAll<SVGCircleElement, BubbleNodeType>("circle");
     bubbles.each((d) => {
       count[d.mastery] += d.initialRadius;
     });
     const alpha = type
-      ? (count.high + count.medium + count.low) / count[type] / 2
+      ? (count.positive + count.negative) / count[type] / 2
       : 1;
     bubbles.each((d) => {
       d.r = d.initialRadius * Math.min(d.mastery === type ? alpha : 1, 5);

@@ -14,9 +14,7 @@ export type BubbleNodeType = {
 export function generateNodes({
   bubbles,
   scale,
-  height,
   width,
-  centerY,
 }: {
   bubbles: Bubble[];
   scale: number;
@@ -27,48 +25,20 @@ export function generateNodes({
   const nodes: BubbleNodeType[] = [];
 
   for (const bubble of bubbles) {
-    const {
-      id,
-      count: { low, medium, high },
-      title: name,
-    } = bubble;
+    const { id, total, title: name } = bubble;
 
-    const highR = Math.max(high * scale, MIN_RADIUS);
-    const mediumR = Math.max(medium * scale, MIN_RADIUS);
-    const lowR = Math.max(low * scale, MIN_RADIUS);
+    const totalR = Math.max(total * scale, MIN_RADIUS);
 
-    high > 0 &&
+    total > 0 &&
       nodes.push({
-        bubbleId: `bubble${id}high`,
-        initialRadius: highR,
-        mastery: "high",
+        bubbleId: `bubble${id}`,
+        initialRadius: totalR,
+        mastery: "positive",
         name,
-        r: highR,
+        r: totalR,
         skillId: id,
         x: Math.random() * width,
         y: 0,
-      });
-    medium > 0 &&
-      nodes.push({
-        bubbleId: `bubble${id}medium`,
-        initialRadius: mediumR,
-        mastery: "medium",
-        name,
-        r: mediumR,
-        skillId: id,
-        x: Math.random() * width,
-        y: centerY,
-      });
-    low > 0 &&
-      nodes.push({
-        bubbleId: `bubble${id}low`,
-        initialRadius: lowR,
-        mastery: "low",
-        name,
-        r: lowR,
-        skillId: id,
-        x: Math.random() * width,
-        y: height,
       });
   }
 

@@ -121,15 +121,13 @@ export class BubbleChart extends PureComponent<Props> {
     const { type, width } = this.props;
     const target = width / 2;
     const outsidePosX: Record<BubbleType, number> = {
-      high: width + this.center.x,
-      medium: type === "high" ? -this.center.x : width + this.center.x,
-      low: -this.center.x,
+      positive: width + this.center.x,
+      negative: -this.center.x,
     };
 
     return {
-      high: type === "high" ? target : outsidePosX.high,
-      medium: type === "medium" ? target : outsidePosX.medium,
-      low: type === "low" ? target : outsidePosX.low,
+      positive: type === "positive" ? target : outsidePosX.positive,
+      negative: type === "negative" ? target : outsidePosX.negative,
     };
   };
 
@@ -137,9 +135,8 @@ export class BubbleChart extends PureComponent<Props> {
     const { scale, width, height } = this.props;
     const forceStrength = 0.04;
     const targetY = {
-      high: this.center.y - interpolate(scale / 20, 15, 50),
-      medium: this.center.y,
-      low: this.center.y + interpolate(scale / 20, 15, 50),
+      positive: this.center.y - interpolate(scale / 20, 15, 50),
+      negative: this.center.y + interpolate(scale / 20, 15, 50),
     };
 
     this.bubbleDrawer && this.bubbleDrawer.highlightType();
@@ -208,9 +205,8 @@ export class BubbleChart extends PureComponent<Props> {
   splitBubbles = () => {
     const { width } = this.props;
     const groupsTarget = {
-      high: width * 0.8,
-      medium: this.center.x,
-      low: width * 0.2,
+      positive: width * 0.8,
+      negative: width * 0.2,
     };
     const forceStrength = 0.04;
     const offset = 100;

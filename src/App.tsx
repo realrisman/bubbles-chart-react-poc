@@ -44,21 +44,13 @@ export class App extends PureComponent {
   };
 
   getScale() {
-    let lowArea = 0;
-    let mediumArea = 0;
-    let highArea = 0;
+    let totalArea = 0;
 
-    for (const {
-      count: { low, medium, high },
-    } of bubbles.elements) {
-      lowArea += (Math.PI * low) ** 2;
-      mediumArea += (Math.PI * medium) ** 2;
-      highArea += (Math.PI * high) ** 2;
+    for (const { total } of bubbles.elements) {
+      totalArea += (Math.PI * total) ** 2;
     }
 
-    const maxRadius = Math.sqrt(
-      Math.max(lowArea + mediumArea + highArea) / Math.PI
-    );
+    const maxRadius = Math.sqrt(Math.max(totalArea) / Math.PI);
 
     return CHART_HEIGHT / 2.5 / maxRadius;
   }

@@ -1,5 +1,5 @@
 declare global {
-  type BubbleType = "low" | "medium" | "high";
+  type BubbleType = "positive" | "negative";
 
   type Bubble = {
     id: number;
