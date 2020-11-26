@@ -27,6 +27,12 @@ export default class BubbleDrawer {
     SVGElement,
     BubbleNodeType
   > | null = null;
+  bubblesText: Selection<
+    SVGTextElement,
+    BubbleNodeType,
+    SVGElement,
+    BubbleNodeType
+  >;
 
   constructor(props: Props) {
     this.props = props;
@@ -36,11 +42,9 @@ export default class BubbleDrawer {
     const { svg } = this.props;
     if (!svg) return this;
 
-    this.bubbles = svg
-      .selectAll("circle")
-      .data(simulation.nodes())
+    const leaf = svg.selectAll("g").data(simulation.nodes()).join("g");
 
-      .enter()
+    this.bubbles = leaf
       .append("circle")
       .attr("r", (d) => d.r)
       .attr("class", (d) => bubbleClassByType[d.mastery])
@@ -55,9 +59,17 @@ export default class BubbleDrawer {
       .on("focus", this.handleFocus)
       .on("click", this.handleClick);
 
-    this.bubbles && this.bubbles.exit().remove();
+    this.bubblesText = leaf
+      .append("text")
+      .text((d) => String(d.name))
+      .attr("dy", ".3em")
+      .style("text-anchor", "middle")
+      .style("font-size", 12);
 
-    simulation.on("tick", this.handleTick);
+    this.bubbles && this.bubbles.exit().remove();
+    this.bubblesText && this.bubblesText.exit().remove();
+
+    simulation.on("tick", this.handleTick).restart();
     return this;
   }
 
@@ -67,6 +79,11 @@ export default class BubbleDrawer {
         .attr("cx", (d: BubbleNodeType) => d.x)
         .attr("cy", (d: BubbleNodeType) => d.y)
         .attr("r", (d: BubbleNodeType) => d.r);
+
+    this.bubblesText &&
+      this.bubblesText
+        .attr("x", (d: BubbleNodeType) => d.x)
+        .attr("y", (d: BubbleNodeType) => d.y);
   };
 
   handleClick = (d: BubbleNodeType): void => {
@@ -81,13 +98,13 @@ export default class BubbleDrawer {
     skillId: number;
     type: BubbleType;
   }): void => {
-    const { onBubbleHover, svg } = this.props;
+    const { onBubbleHover } = this.props;
     onBubbleHover && onBubbleHover(skillId, type);
 
-    svg &&
-      svg
-        .selectAll<SVGCircleElement, BubbleNodeType>("circle")
-        .attr("opacity", (d) => (skillId === d.skillId ? 1 : 0.5));
+    // svg &&
+    //   svg
+    //     .selectAll<SVGCircleElement, BubbleNodeType>("circle")
+    //     .attr("opacity", (d) => (skillId === d.skillId ? 1 : 0.5));
   };
 
   handleMouseLeave = (): void => {
