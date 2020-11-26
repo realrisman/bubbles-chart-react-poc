@@ -1,5 +1,3 @@
-const MIN_RADIUS = 10;
-
 export type BubbleNodeType = {
   bubbleId: string;
   initialRadius: number;
@@ -30,6 +28,7 @@ export function generateNodes({
 
   for (const bubble of bubbles) {
     const { id, total, title: name, count } = bubble;
+    const MIN_RADIUS = 10;
 
     const totalR = Math.max(total * scale, MIN_RADIUS);
 

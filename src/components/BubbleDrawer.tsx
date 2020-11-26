@@ -21,18 +21,6 @@ export default class BubbleDrawer {
     SVGElement,
     BubbleNodeType
   > | null = null;
-  bubblesTextPositive: Selection<
-    SVGTextElement,
-    BubbleNodeType,
-    SVGElement,
-    BubbleNodeType
-  >;
-  bubblesTextPercentagePositive: Selection<
-    SVGTextElement,
-    BubbleNodeType,
-    SVGElement,
-    BubbleNodeType
-  >;
   rectPositive: Selection<
     SVGRectElement,
     BubbleNodeType,
@@ -45,20 +33,20 @@ export default class BubbleDrawer {
     SVGElement,
     BubbleNodeType
   > | null = null;
-  bubblesTextNegative: Selection<
-    SVGTextElement,
-    BubbleNodeType,
-    SVGElement,
-    BubbleNodeType
-  >;
-  bubblesTextPercentageNegative: Selection<
-    SVGTextElement,
-    BubbleNodeType,
-    SVGElement,
-    BubbleNodeType
-  >;
   rectNegative: Selection<
     SVGRectElement,
+    BubbleNodeType,
+    SVGElement,
+    BubbleNodeType
+  >;
+  bubblesText: Selection<
+    SVGTextElement,
+    BubbleNodeType,
+    SVGElement,
+    BubbleNodeType
+  >;
+  bubblesTextPercentage: Selection<
+    SVGTextElement,
     BubbleNodeType,
     SVGElement,
     BubbleNodeType
@@ -90,23 +78,44 @@ export default class BubbleDrawer {
 
     this.rectPositive = leafPositive
       .append("clipPath")
-      .attr("id", (d) => `clip-${d.bubbleId}`)
+      .attr("id", (d) => `clip-${d.bubbleId}-positive`)
       .append("rect")
-      .attr("height", (d) => d.r * 2)
-      .attr("width", (d) => d.r * 2);
+      .attr("height", (d) => d.r * 2 + 10)
+      .attr("width", (d) => d.r * 2 + 10);
 
     this.bubblesPositive = leafPositive
       .append("circle")
-      .attr("clip-path", (d) => `url(#clip${d.bubbleId})`)
+      .attr("clip-path", (d) => `url(#clip-${d.bubbleId}-positive)`)
       .attr("r", (d) => d.r)
       .attr("class", styles.bubble)
-      .style("fill", (d) => color(d.count.positive))
 
       .on("mouseover", this.handleMouseOver)
       .on("focus", this.handleFocus)
       .on("click", this.handleClick);
 
-    this.bubblesTextPositive = leafPositive
+    const leafNegative = leafRoot
+      .append("g")
+      .join("g")
+      .attr("class", styles.gNegative);
+
+    this.rectNegative = leafNegative
+      .append("clipPath")
+      .attr("id", (d) => `clip-${d.bubbleId}-negative`)
+      .append("rect")
+      .attr("height", (d) => d.r * 2 + 10)
+      .attr("width", (d) => d.r * 2 + 10);
+
+    this.bubblesNegative = leafNegative
+      .append("circle")
+      .attr("clip-path", (d) => `url(#clip-${d.bubbleId}-negative`)
+      .attr("r", (d) => d.r)
+      .attr("class", styles.bubble)
+
+      .on("mouseover", this.handleMouseOver)
+      .on("focus", this.handleFocus)
+      .on("click", this.handleClick);
+
+    this.bubblesText = leafRoot
       .append("text")
       .text((d) => String(d.name))
       .attr("dy", ".3em")
@@ -115,16 +124,13 @@ export default class BubbleDrawer {
       .style("font-size", 20)
       .style("font-weight", 600);
 
-    this.bubblesTextPercentagePositive = leafPositive
+    this.bubblesTextPercentage = leafRoot
       .append("text")
       .text((d) => `${String(d.count.positive)}%`)
       .attr("dy", ".3em")
       .style("text-anchor", "middle")
       .style("fill", "black")
       .style("font-size", 16);
-
-    this.bubblesPositive && this.bubblesPositive.exit().remove();
-    this.bubblesTextPositive && this.bubblesTextPositive.exit().remove();
 
     simulation.on("tick", this.handleTick).restart();
     return this;
@@ -133,8 +139,10 @@ export default class BubbleDrawer {
   handleTick = (): void => {
     this.rectPositive &&
       this.rectPositive
-        .attr("x", (d: BubbleNodeType) => d.x)
-        .attr("y", (d: BubbleNodeType) => d.y);
+        .attr("x", (d: BubbleNodeType) => {
+          return d.x - d.r - 5;
+        })
+        .attr("y", (d: BubbleNodeType) => d.y - d.r - 5);
 
     this.bubblesPositive &&
       this.bubblesPositive
@@ -142,13 +150,30 @@ export default class BubbleDrawer {
         .attr("cy", (d: BubbleNodeType) => d.y)
         .attr("r", (d: BubbleNodeType) => d.r);
 
-    this.bubblesTextPositive &&
-      this.bubblesTextPositive
+    this.rectNegative &&
+      this.rectNegative
+        .attr("x", (d: BubbleNodeType) => {
+          const percentage = d.count.positive / 100;
+          const width = d.r * 2;
+          const result = width * percentage;
+          const start = d.x - d.r;
+          return start + result;
+        })
+        .attr("y", (d: BubbleNodeType) => d.y - d.r);
+
+    this.bubblesNegative &&
+      this.bubblesNegative
+        .attr("cx", (d: BubbleNodeType) => d.x)
+        .attr("cy", (d: BubbleNodeType) => d.y)
+        .attr("r", (d: BubbleNodeType) => d.r);
+
+    this.bubblesText &&
+      this.bubblesText
         .attr("x", (d: BubbleNodeType) => d.x)
         .attr("y", (d: BubbleNodeType) => d.y);
 
-    this.bubblesTextPercentagePositive &&
-      this.bubblesTextPercentagePositive
+    this.bubblesTextPercentage &&
+      this.bubblesTextPercentage
         .attr("x", (d: BubbleNodeType) => d.x)
         .attr("y", (d: BubbleNodeType) => d.y + 20);
   };

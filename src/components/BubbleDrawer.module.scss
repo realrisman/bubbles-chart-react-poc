@@ -4,6 +4,10 @@
   fill: #c5d7ea;
 }
 
+.gNegative {
+  fill: #f9caca;
+}
+
 .bubble {
   transition: fill 0.4s ease, opacity 0.4s ease, stroke 0.4s ease;
   stroke: var(--white);
