@@ -9,6 +9,10 @@ export type BubbleNodeType = {
   skillId: number;
   x: number;
   y: number;
+  count: {
+    positive: number;
+    negative: number;
+  };
 };
 
 export function generateNodes({
@@ -25,7 +29,7 @@ export function generateNodes({
   const nodes: BubbleNodeType[] = [];
 
   for (const bubble of bubbles) {
-    const { id, total, title: name } = bubble;
+    const { id, total, title: name, count } = bubble;
 
     const totalR = Math.max(total * scale, MIN_RADIUS);
 
@@ -39,6 +43,7 @@ export function generateNodes({
         skillId: id,
         x: Math.random() * width,
         y: 0,
+        count: count,
       });
   }
 

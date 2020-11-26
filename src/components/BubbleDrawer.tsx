@@ -32,6 +32,12 @@ export default class BubbleDrawer {
     SVGElement,
     BubbleNodeType
   >;
+  bubblesTextPercentage: Selection<
+    SVGTextElement,
+    BubbleNodeType,
+    SVGElement,
+    BubbleNodeType
+  >;
   rectPositive: Selection<
     SVGRectElement,
     BubbleNodeType,
@@ -78,7 +84,15 @@ export default class BubbleDrawer {
       .text((d) => String(d.name))
       .attr("dy", ".3em")
       .style("text-anchor", "middle")
-      .style("font-size", 12);
+      .style("font-size", 20)
+      .style("font-weight", 600);
+
+    this.bubblesTextPercentage = leaf
+      .append("text")
+      .text((d) => `${String(d.count.positive)}%`)
+      .attr("dy", ".3em")
+      .style("text-anchor", "middle")
+      .style("font-size", 16);
 
     this.bubbles && this.bubbles.exit().remove();
     this.bubblesText && this.bubblesText.exit().remove();
@@ -103,6 +117,11 @@ export default class BubbleDrawer {
       this.bubblesText
         .attr("x", (d: BubbleNodeType) => d.x)
         .attr("y", (d: BubbleNodeType) => d.y);
+
+    this.bubblesTextPercentage &&
+      this.bubblesTextPercentage
+        .attr("x", (d: BubbleNodeType) => d.x)
+        .attr("y", (d: BubbleNodeType) => d.y + 20);
   };
 
   handleClick = (d: BubbleNodeType): void => {

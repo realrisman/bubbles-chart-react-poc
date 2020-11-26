@@ -14,8 +14,8 @@
       "title": "Bow Hunting",
       "total": 70,
       "count": {
-        "positive": 70,
-        "negative": 30
+        "positive": 40,
+        "negative": 60
       }
     },
     {
@@ -23,35 +23,35 @@
       "title": "Nunchuck",
       "total": 30,
       "count": {
-        "positive": 70,
-        "negative": 30
+        "positive": 10,
+        "negative": 90
       }
     },
     {
       "id": 4,
-      "title": "Communication",
+      "title": "Noris",
       "total": 20,
       "count": {
-        "positive": 70,
-        "negative": 30
+        "positive": 90,
+        "negative": 10
       }
     },
     {
       "id": 5,
-      "title": "Bow Hunting",
+      "title": "Hunting",
       "total": 60,
       "count": {
-        "positive": 70,
-        "negative": 30
+        "positive": 20,
+        "negative": 80
       }
     },
     {
       "id": 6,
-      "title": "Nunchuck",
+      "title": "Jhon",
       "total": 40,
       "count": {
-        "positive": 70,
-        "negative": 30
+        "positive": 30,
+        "negative": 70
       }
     }
   ]
