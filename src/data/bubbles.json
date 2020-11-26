@@ -105,7 +105,7 @@
       "total": 49,
       "count": {
         "positive": 85,
-        "negative": 25
+        "negative": 15
       }
     },
     {
@@ -141,7 +141,7 @@
       "total": 51,
       "count": {
         "positive": 78,
-        "negative": 0
+        "negative": 22
       }
     }
   ]
