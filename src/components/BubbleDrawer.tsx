@@ -3,7 +3,6 @@ import { Selection } from "d3-selection";
 import { Simulation } from "d3-force";
 
 import styles from "./BubbleDrawer.module.scss";
-import * as d3 from "d3";
 
 type Props = {
   svg: Selection<SVGElement, BubbleNodeType, null, undefined> | null;
@@ -59,11 +58,6 @@ export default class BubbleDrawer {
   draw(simulation: Simulation<BubbleNodeType, undefined>): BubbleDrawer {
     const { svg } = this.props;
     if (!svg) return this;
-
-    const color = d3
-      .scaleThreshold<number, string>()
-      .domain([40, 75, 90])
-      .range(["red", "yellow", "green"]);
 
     const leafRoot = svg
       .selectAll("a")
