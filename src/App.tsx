@@ -3,7 +3,7 @@ import { BubbleChart } from "./components/BubbleChart";
 
 import bubbles from "./data/bubbles.json";
 
-const CHART_HEIGHT = 800;
+const CHART_HEIGHT = 1000;
 
 export class App extends PureComponent {
   state = {
@@ -58,7 +58,7 @@ export class App extends PureComponent {
   render() {
     const { tooltipForBubbleId, tooltipForType } = this.state;
 
-    const scale = this.getScale();
+    const scale = this.getScale() * 1.4;
 
     return (
       <BubbleChart
